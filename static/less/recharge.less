@@ -1,6 +1,5 @@
 .cell-item(){
-  display: flex;
-  align-items: center;
+  .flexLayout(flex-start,center);
   height: 100rpx;
   margin: 0 24rpx;
   font-size: 24rpx;
@@ -29,9 +28,7 @@
       .input-right {
         flex: 1;
         height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
+        .flexLayout(flex-end,center);
         text-align: right;
         .input-value {
           height: 60rpx;
@@ -162,8 +159,7 @@
         margin-bottom: 30rpx;
       }
       &-bottom {
-        display: flex;
-        justify-content: space-between;
+        .flexLayout(space-between);
       }
     }
   }

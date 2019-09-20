@@ -1,7 +1,14 @@
 <template>
   <view class="fuelCardRecharge">
     <img src="../../assets/img/info/card_banner.png" class="banner" />
-    <img src="../../assets/img/info/add_oil_card.png" class="add-btn" />
+
+    <view class="card-info">
+      <img src="../../assets/img/info/add_oil_card.png" class="card-btn" v-if="false" />
+      <template v-else>
+        <img src="../../assets/img/info/oil_card.png" class="card-btn" />
+        <text class="card-num">74968456456456</text>
+      </template>
+    </view>
     <view class="list">
       <view
         class="list-item"
@@ -51,11 +58,26 @@ export default {
     width: 100%;
     height: 208rpx;
   }
-  .add-btn {
+  .card-info {
+    position: relative;
     margin: 31rpx 0;
     width: 100%;
     height: 173rpx;
     background: #fff;
+    .card-btn {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .card-num {
+      position: absolute;
+      left: 210rpx;
+      top: 36rpx;
+      color: #fff;
+      font-size: 34rpx;
+    }
   }
   .list {
     background: #fff;
