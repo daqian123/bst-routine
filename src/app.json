@@ -1,7 +1,7 @@
 {
   "pages": [
     "pages/index/index/main",
-    "pages/personalCenter/order/main",
+    "pages/personalCenter/order/main"
   ],
   "subpackages": [
     {

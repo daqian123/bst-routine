@@ -1,58 +1,43 @@
-
+/*注册全局方法*/
+import { store } from "@/store/store"
+import {
+    showModal
+} from "@/utils/pointDialog"
+import api from "../api";
 export default {
-    setTime(callback, time = 1000) {
-        setTimeout(() => {
-            callback()
-        }, time)
+    //未登录隐藏转发按钮
+    isShowShare() {
+        !store.state.moduleLogin.loginStatus ? wx.hideShareMenu() : wx.showShareMenu();
     },
-    //个位转两位数
-    formartNum(n) {
-        n = parseInt(n).toString()
-        return n[1] ? n : '0' + n
+    //设置agent_id参数
+    setShareInfo(title, path, params = {}, img = "") {
+        params = typeof params == "string" ? JSON.parse(params) : params;
+        params.agent_id = wx.getStorageSync("user").agent_id;
+        let obj = {
+            title,
+            path: `/pages${path}/main?param=${JSON.stringify(params)}`
+        };
+        if (img) obj.imageUrl = img;
+        return obj;
     },
-    //提示
-    showToast(text) {
-        wx.showToast({
-            title: text,
-            icon: "none"
-        })
-    },
-    //显示加载中
+    //显示loading内容
     showLoading(text) {
         wx.showLoading({
             title: text,
-            mask: true
-        })
-    },
-    // 显示成功提示
-    showSuccess(text) {
-        wx.showToast({
-            title: text,
-            icon: 'success'
-        })
-    },
-    // 弹框提示
-    showModal(fn, content, showCancel = true) {
-        wx.showModal({
-            title: "温馨提示",
-            content: content,
-            showCancel,
-            success: res => {
-                fn(res)
+            mask: true,
+            success: () => {
+                setTimeout(() => {
+                    wx.hideLoading();
+                }, 5000);
             }
         })
     },
-    // 下拉弹框
-    showActionSheet(fn, list, color = "#333333") {
-        wx.showActionSheet({
-            itemList: list,
-            itemColor: color,
-            success: res => {
-                fn(res)
-            }
-        })
+    //隐藏loading
+    hideLoading() {
+        setTimeout(() => {
+            wx.hideLoading();
+        }, 500);
     },
-    //设置导航栏标题颜色
     setNavigationBar(text, frontColor = "#000000", backgroundColor = "#ffffff") {
         wx.setNavigationBarTitle({
             title: text
@@ -62,7 +47,6 @@ export default {
             backgroundColor
         });
     },
-    //隐藏中间四位号码
     setMobile(mobile) {
         let re = new RegExp(/^1[3456789]\d{9}$/);
         if (re.test(mobile)) {
@@ -70,7 +54,6 @@ export default {
         }
         return { mobile, hideMobile: mobile }
     },
-    //以iphone6为标准获取其他屏幕的大小
     getListInfo(fn, height, width = 375) {
         wx.getSystemInfo({
             success: res => {
@@ -82,51 +65,59 @@ export default {
             }
         });
     },
-    //获取手机信息
-    getSystemInfo(cbok) {
-        wx.getSystemInfo({
-            success: res => {
-                res.isIOS = res.platform == "ios" ? false : true
-                res.isWX7 = res.version[0] > 6 ? true : false
-                cbok(res)
+    isApprove(params = {}) {
+        let url;
+        let shop_id = wx.getStorageSync("userInfo").shop_id;
+        api.getVerify({ shop_id }).then(res => {
+            let is_verify = parseInt(res.info.status)
+            let is_food_cate = res.info.is_food_cate
+            switch (is_verify) {
+                case 0:
+                    url = `/pages/shopPackage/pages/approveInfo/main?shop_id=${shop_id}`;
+                    wx.navigateTo({ url });
+                    break;
+                case 1:
+                    url =
+                        "/pages/shopPackage/pages/addCommodity/main?data=" + JSON.stringify(params);
+                    wx.navigateTo({ url });
+                    break;
+                case 2:
+                    showModal(res => {
+                        if (res.confirm) {
+                            wx.redirectTo({ url: "/pages/shopPackage/pages/addApprove/main?param=" + JSON.stringify({ status: 2, is_food_cate }) });
+                        }
+                    }, "您的商户未通过认证，请重新认证后再尝试", false)
+                    break;
+                case 3:
+                    showModal(res => {
+                        if (res.confirm) {
+                            wx.redirectTo({ url: "/pages/shopPackage/pages/addApprove/main?param=" + JSON.stringify({ status: 0, is_food_cate }) });
+                        }
+                    }, "您的商户未认证，请先认证后再尝试", false)
+                    break;
             }
-        });
-    },
-    scanCode() {
-        wx.scanCode({
-            success(res) {
-                console.log(res)
-                let path
-                if (res.result) {
-                    let url = res.result
-                    let data = getUrlData(url)
-                    if (url.includes('shareGoodsDetail')) {
-                        let { equip_sn } = data
-                        path = `/pages/index/shareGoodsDetail/main?equip_sn=${equip_sn}`
-                    }
-                } else {
-                    path = `/${res.path} `
-                }
-                wx.navigateTo({
-                    url: path,
-                    fail: () => {
-                        wx.showToast({
-                            title: '识别失败',
-                            icon: "none"
-                        });
-                    }
-                });
-            },
-            fail: () => {
-                wx.showToast({
-                    title: '识别失败',
-                    icon: "none"
-                });
-            }
-        });
+        })
     }
 }
-function getUrlData(url) {
-    let qs = require('qs')
-    return qs.parse(url.slice(url.indexOf('?') + 1, url.length))
+// 基础版的防抖函数
+let timeout;
+function debounce(func, wait) {
+    return function () {
+        clearTimeout(timeout);
+        timeout = setTimeout(func, wait);
+    };
 }
+// 基础版的节流函数
+let timeout2 = null;
+function throttle(func, wait) {
+    return function () {
+        if (!timeout2) {
+            timeout2 = setTimeout(function () {
+                clearTimeout(timeout2);
+                timeout2 = null;
+                func();
+            }, wait);
+        }
+    };
+}
+export { debounce, throttle }

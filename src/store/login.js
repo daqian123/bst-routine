@@ -1,52 +1,117 @@
-import api from "@/api"
-import common from "@/utils/common"
-import { setStorage } from "@/utils/storage"
-export default {
+import { showToast } from "@/utils/pointDialog"
+import { store } from "@/store/store"
+import api from "@/api/index"
+import Vue from 'vue'
+const moduleLogin = {
     state: {
-        userAuthorize: false,
-        TOKEN: "",
-        USER_INFO: '',
-        equip_sn: ""
+        iosSystemStatus: false,//是否是ios系统
+        userInfo: "",//用户信息
+        locationStatus: false,//位置授权状态
+        authorizeModal: false,//位置授权弹框
+        loginStatus: false,//登录状态
+        msgStatus: false,
+        loginModal: false,//登录弹框提示
+        agent_id: "",
+        sign: ""//签到信息
     },
     mutations: {
-        setUserAuthorize(state, status) {
-            state.userAuthorize = status
+        //判断是否是ios系统
+        setSystemStatus(state, status) {
+            state.iosSystemStatus = status
         },
-        SET_TOKEN(state, token) {
-            state.TOKEN = token
-            setStorage('token', token)
+        //获取转发后agent_id
+        setAgentId(state, agent_id) {
+            state.agent_id = agent_id
         },
-        SET_USERINFO(state, userInfo) {
-            state.USER_INFO = userInfo
-            setStorage('userInfo', userInfo)
+        //修改用户信息
+        changUserInfo(state, payLoad) {
+            wx.setStorageSync("userInfo", payLoad)
+            state.userInfo = payLoad
         },
-        scanCodeGetEquip_sn(state, equip_sn) {
-            state.equip_sn = equip_sn
-        }
-    },
-    actions: {
-        async   userLogin({ commit }, params) {
-            await new Promise((reslove, reject) => {
-                api.checkLogin(params).then(async res => {
-                    commit('SET_TOKEN', res.data.token)
-                    reslove()
-                }).catch(() => {
-                    reject()
-                    common.showToast('授权失败')
-                })
+        //获取用户信息
+        getUserInfo(state) {
+            api.getInfo().then(res => {
+                //获取用户平台信息
+                let userInfo = res.info
+                userInfo.levelName = res.levelName
+                let sign = res.sign
+                state.loginStatus = true
+                wx.setStorageSync("userInfo", userInfo)
+                state.userInfo = userInfo
+                state.sign = sign
+                //  store.commit("isNewMsg")
             })
-            await new Promise(reslove => {
-                api.getUserInfo().then(res => {
-                    reslove()
-                    commit('SET_USERINFO', Object.assign({}, res.data, { is_new_user: res.is_new_user }))
-                })
-            })
+        },
+        //查看是否有未读消息
+        isNewMsg(state) {
+            api.isNewMsg().then(res => {
+                if (res.info.total != 0) {
+                    state.msgStatus = false
+                    wx.showTabBarRedDot({ index: 3 });
+                } else {
+                    state.msgStatus = true
+                    wx.hideTabBarRedDot({ index: 3 })
+                }
+            });
+        },
+        //设置用户信息
+        setUserLoginStatus(state, status) {
+            state.loginStatus = status
+        },
+        //设置登录状态
+        setLoginStatus(state, status) {
+            state.loginStatus = status
+            Vue.prototype.isLogin = () => {
+                if (!state.loginStatus) {
+                    state.loginModal = true
+                    return false
+                }
+                state.loginModal = false
+                return true
+            }
+        },
+        //用户地理位置授权状态
+        setLocationStatus(state, status) {
+            state.locationStatus = status
+            //拒绝授权则使用默认地址
+            if (!state.locationStatus) {
+                store.commit("getActiveAddress", { data: { code: "340100", city_code: "340100", district: "合肥市", city: "合肥市", lat: 31.79322, lng: 117.30794, address: '合肥市' }, status: 1 })
+            } else {
+                store.commit("getMyLocationInfo")
+            }
+            Vue.prototype.getLocationStatus = () => {
+                if (!state.locationStatus) {
+                    state.authorizeModal = true
+                    return false
+                }
+                state.authorizeModal = false
+                return true
+            }
+        },
+        //是否显示登录授权提示
+        isShowLoginModal(state, status) {
+            state.loginModal = status
+        },
+        //是否显示授权提示
+        isShowModal(state, status) {
+            state.authorizeModal = status
+        },
+        //设置授权状态
+        setAuthorize(state, status) {
+            state.authorizeModal = !status
+            state.locationStatus = status
+            status && store.commit("getMyLocationInfo")
         }
     },
     getters: {
-        userAuthorize: state => state.userAuthorize,
-        TOKEN: state => state.TOKEN,
-        USER_INFO: state => state.USER_INFO,
-        equip_sn: state => state.equip_sn
+        loginModal: state => state.loginModal,
+        loginStatus: state => state.loginStatus,
+        locationStatus: state => state.locationStatus,
+        authorizeModal: state => state.authorizeModal,
+        userInfo: state => state.userInfo,
+        iosSystemStatus: state => state.iosSystemStatus,
+        sign: state => state.sign
     }
 }
+
+export default moduleLogin

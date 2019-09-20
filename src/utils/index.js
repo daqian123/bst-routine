@@ -1,24 +1,53 @@
-function formatNumber (n) {
-  const str = n.toString()
-  return str[1] ? str : `0${str}`
+import api from "@/api/index"
+import { store } from "@/store/store"
+import { getArray } from "@/utils/public"
+import { showToast } from "@/utils/pointDialog"
+/**
+ * 获取公用接口数据存入缓存
+ * */
+//获取所有栏目子类型
+const getColumnCate = function (id = 0) {
+  api.getColumnCate({ id: id }).then(res => {
+    let list = res.info.list.filter(item => {
+
+      return item.name != "聊天交友" && item.name != "微友求助" && item.name != "城际搭车";
+    })
+    store.commit("getColumnCate", list)
+  })
 }
-
-export function formatTime (date) {
-  const year = date.getFullYear()
-  const month = date.getMonth() + 1
-  const day = date.getDate()
-
-  const hour = date.getHours()
-  const minute = date.getMinutes()
-  const second = date.getSeconds()
-
-  const t1 = [year, month, day].map(formatNumber).join('/')
-  const t2 = [hour, minute, second].map(formatNumber).join(':')
-
-  return `${t1} ${t2}`
+//获取所有行业子类型
+const getSelectIndustry = function () {
+  api.getSelectIndustry({ pid: 0 }).then(res => {
+    let list = res.info.list.filter(item => {
+      if (item.name == "金融服务") item.name = "财经服务";
+      return item.status && item.name != "医疗健康"
+    })
+    list.forEach(item => {
+      item.icon = "http://images.lexbst.com" + item.icon
+    });
+    store.commit("getIndustryList", { industryArray: getArray(list, 8), industryList: list })
+  });
 }
-
-export default {
-  formatNumber,
-  formatTime
+const getSystemInfo = function () {
+  wx.getSystemInfo({
+    success: res => {
+      if (res.platform == "ios") {
+        store.commit("setSystemStatus", false);
+      } else {
+        store.commit("setSystemStatus", true);
+      }
+    }
+  });
 }
+const getAreaCode = (arr, fn) => {
+  api.getAreaCode({ city_name: arr[1], area_name: arr[2] }).then(
+    res => { fn(res) },
+    err => { showToast("获取地区信息失败，请更换其他地址"); }
+  );
+}
+const getProvinceCity = () => {
+  api.getProvinceCity().then(res => {
+    wx.setStorageSync("provinceCityList", res.info.list)
+  });
+}
+export { getColumnCate, getSelectIndustry, getSystemInfo, getAreaCode, getProvinceCity }

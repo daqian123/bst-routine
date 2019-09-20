@@ -1,0 +1,76 @@
+.top-title {
+    text-align: center;
+    height: 63px;
+    line-height: 63px;
+}
+.top-img {
+    height: 20px;
+    width: 170px;
+}
+.top-type {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 55px;
+    width: 100%;
+}
+.top-info {
+    width: 85px;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+.last-time {
+    margin-bottom: 10px;
+}
+.last-time span {
+    font-weight: 600;
+    color: red;
+}
+.top-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.5em;
+}
+.top-time,.top-price{
+    padding: 0 5px;
+}
+.top-price {
+    font-weight: 600;
+}
+.showtop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    margin: 8px 0;
+}
+.showtop-title {
+    height: 50px;
+    line-height: 50px;
+    font-size: 18px;
+}
+.showtop-price {
+    display: flex;
+    height: 23px;
+    width: 105px;
+    border: 1px #e5e5e5 solid;
+    text-align: center;
+    line-height: 23px;
+    color: #444444;
+}
+.group,
+.add {
+    flex: 1;
+    font-size: 18px;
+}
+.date-time {
+    flex: 2;
+    border-right: 1px solid #e5e5e5;
+    border-left: 1px solid #e5e5e5;
+}
+.checkbox {
+    color: rgb(256, 16, 16);
+    font-size: 13px;
+}

@@ -1,0 +1,46 @@
+
+/*设置初始样式*/
+.iconfont,i {
+  display: inline-block;
+  font-size:16px;
+}
+page{
+  font-family:'微软雅黑';
+  font-size: 14px;
+  color: #333333;
+}
+button,input{
+  display: inline-block;
+  font-size: 13px;
+}
+input,label{
+  font-size: 14px;
+}
+input{
+  min-height: auto;
+}
+checkbox {
+  zoom: 60%;
+  position: relative;
+  bottom: 2px;
+}
+/*swtich整体大小*/
+.wx-switch-input {
+  width: 82rpx !important;
+  height: 40rpx !important;
+}
+/*白色样式（false的样式）*/
+.wx-switch-input::before {
+  width: 80rpx !important;
+  height: 36rpx !important;
+}
+/*绿色样式（true的样式）*/
+.wx-switch-input::after {
+  width: 40rpx !important;
+  height: 36rpx !important;
+}
+.scroll-time ::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  color: transparent !important;
+}

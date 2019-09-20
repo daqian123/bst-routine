@@ -1,0 +1,35 @@
+.releaseInfo-head {
+  min-height: 120px;
+  box-sizing: border-box;
+  background: #fff;
+  border-top: 10px solid #f6f6f6;
+  border-bottom: 5px solid #f6f6f6;
+  box-sizing: border-box;
+  padding: 0 12px;
+}
+.releaseInfo-top {
+  white-space: nowrap;
+  height: 50px;
+  line-height: 50px;
+  font-size: 18px;
+  color: #000;
+}
+.release-type {
+  min-width: 80px;
+  height: 38px;
+  padding: 0 15px;
+  text-align: center;
+  background: #fff;
+  color: #888888;
+  line-height: 38px;
+  margin: 5px;
+}
+.dian {
+  overflow: hidden;
+  position: relative;
+  top: -5px;
+}
+.btn-active {
+  background: #416ce3;
+  color: #fff;
+}

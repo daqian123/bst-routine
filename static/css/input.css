@@ -1,0 +1,60 @@
+/* 输入框样式 */
+.item-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    width: 100%;
+    border-bottom: 1px solid #e5e5e5;
+    height: 50px;
+}
+.item-input input {
+    flex: 1;
+}
+.input-right{
+    flex: 1;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+.item-input .address{
+    padding-right: 30px;
+}
+.form-input {
+    padding: 0 12px;
+    background: #fff;
+}
+.form-input label,
+.introduce-input label,
+.upload-log-img label {
+  position: relative;
+  padding-left: 10px;
+  width: 90px;
+  font-size: 15px;
+}
+.icon-xing {
+  position: absolute;
+  color: red;
+  top: 2px;
+  left: 0;
+}
+.choose-icon{
+    color: #999;
+}
+.introduce-input {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    padding: 0 12px;
+}
+.introduce-info textarea {
+    width: calc(100% - 20px);
+    background: #f6f6f6;
+    padding: 10px;
+    margin: 0 10px;
+    box-sizing: border-box;
+    border: 1px solid #e5e5e5;
+}
+.introduce-info {
+    background: #fff;
+}

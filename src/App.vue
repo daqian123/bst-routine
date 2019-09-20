@@ -1,30 +1,46 @@
+
 <script>
-import Vue from "vue";
-import api from "@/api";
-import common from "@/utils/common";
+import api from "@/api/index";
 import authorize from "@/utils/authorize";
-import { getStorage } from "@/utils/storage";
 import { store } from "@/store/store";
+import Vue from "vue";
+import common from "@/utils/common";
+import { getColumnCate, getSelectIndustry, getSystemInfo } from "@/utils/index";
+
 export default {
   created() {
-    // 调用API从本地缓存中获取数据
-    /*
-     * 平台 api 差异的处理方式:  api 方法统一挂载到 mpvue 名称空间, 平台判断通过 mpvuePlatform 特征字符串
-     * 微信：mpvue === wx, mpvuePlatform === 'wx'
-     * 头条：mpvue === tt, mpvuePlatform === 'tt'
-     * 百度：mpvue === swan, mpvuePlatform === 'swan'
-     * 支付宝(蚂蚁)：mpvue === my, mpvuePlatform === 'my'
-     */
-    //挂载全局
     authorize.viewAuthorize();
-    for (const key in common) {
-      Vue.prototype[`$${key}`] = common[key];
+    getSystemInfo();
+    let dots = wx.getStorageSync("dots");
+    if (!dots) {
+      dots = {
+        releaseDot: false,
+        videoDot: false,
+        personalDot: false,
+        propsDot: false,
+        vipDot: false,
+        tutorialDot: false
+      };
+      wx.setStorageSync("dots", dots);
     }
-    Vue.prototype.$api = api;
-    Vue.prototype.$store = store;
+    if (!dots.releaseDot) {
+      wx.showTabBarRedDot({ index: 2 });
+    }
+    if (!dots.videoDot) {
+      wx.showTabBarRedDot({ index: 3 });
+    }
+    if (!dots.personalDot) {
+      wx.showTabBarRedDot({ index: 4 });
+    }
+    Vue.prototype.setNavigationBar = common.setNavigationBar;
+    Vue.prototype.isShowShare = common.isShowShare;
+    Vue.prototype.setShareInfo = common.setShareInfo;
+    Vue.prototype.showLoading = common.showLoading;
+    Vue.prototype.hideLoading = common.hideLoading;
+    Vue.prototype.setMobile = common.setMobile;
+    Vue.prototype.getListInfo = common.getListInfo;
+    getColumnCate(); //缓存所有信息栏目和子类型，侧边模态框
+    getSelectIndustry(); //缓存所有行业和子类型，侧边模态框
   }
 };
 </script>
-
-<style>
-</style>
