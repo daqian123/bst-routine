@@ -1,0 +1,9 @@
+{
+    "navigationBarTitleText": "话费充值",
+    "navigationBarBackgroundColor": "#416ce3",
+    "navigationBarTextStyle": "white",
+    "usingComponents": {
+        "van-popup": "/static/vant/popup/index",
+        "van-icon": "/static/vant/icon/index"
+    }
+}

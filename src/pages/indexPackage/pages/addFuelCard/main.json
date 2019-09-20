@@ -1,0 +1,6 @@
+{
+    "navigationBarTitleText": "添加加油卡",
+    "usingComponents": {
+        "van-icon": "/static/vant/icon/index"
+    }
+}

@@ -1,0 +1,61 @@
+{
+  "pages": [
+    "pages/index/index/main",
+    "pages/personalCenter/order/main",
+  ],
+  "subpackages": [
+    {
+      "root": "pages/indexPackage",
+      "pages": [
+        "pages/convenientHome/main",
+        "pages/hydroelectricGas/main",
+        "pages/waterPlant/main",
+        "pages/addPayment/main",
+        "pages/selectGroup/main",
+        "pages/waterFeeRecharge/main",
+        "pages/electricityFeeRecharge/main",
+        "pages/gasRecharge/main",
+        "pages/recharge/main",
+        "pages/rechargeRecord/main",
+        "pages/rechargeDetail/main",
+        "pages/trafficRecharge/main",
+        "pages/videoVip/main",
+        "pages/fuelCardRecharge/main",
+        "pages/qcoinRecharge/main",
+        "pages/selectFuelCard/main",
+        "pages/addFuelCard/main"
+      ]
+    }
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "WeChat",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#999",
+    "backgroundColor": "#fafafa",
+    "selectedColor": "#333",
+    "borderStyle": "white",
+    "list": [
+      {
+        "text": "首页",
+        "pagePath": "pages/index/index/main",
+        "iconPath": "static/img/tabs/home.png",
+        "selectedIconPath": "static/img/tabs/home-active.png"
+      },
+      {
+        "text": "订单",
+        "pagePath": "pages/personalCenter/order/main",
+        "iconPath": "static/img/tabs/orders.png",
+        "selectedIconPath": "static/img/tabs/orders-active.png"
+      }
+    ],
+    "position": "bottom"
+  },
+  "usingComponents": {
+    "i-load-more": "/static/iview/load-more/index",
+    "i-icon": "/static/iview/icon/index"
+  }
+}

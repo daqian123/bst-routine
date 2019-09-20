@@ -1,0 +1,4 @@
+<view class="i-class i-radio" catchtap="radioChange">
+    <radio value="{{value}}" checked="{{checked}}" color="{{checked?color:''}}" disabled="{{disabled}}" class="i-radio-radio {{positionCls}}" />
+    <view class="i-radio-title">{{value}}</view>
+</view>

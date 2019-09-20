@@ -1,0 +1,183 @@
+{
+	"description": "项目配置文件。",
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"enhance": false,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"coverView": true,
+		"autoAudits": false,
+		"checkInvalidKey": true,
+		"checkSiteMap": true,
+		"uploadWithSourceMap": true,
+		"babelSetting": {
+			"ignore": [],
+			"disablePlugins": [],
+			"outputPath": ""
+		}
+	},
+	"miniprogramRoot": "dist/wx/",
+	"compileType": "miniprogram",
+	"appid": "wxc24388966cd301f2",
+	"projectname": "wx-wine",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": 18,
+			"list": [
+				{
+					"id": 0,
+					"name": "扫码",
+					"pathName": "pages/index/shareGoodsDetail/main",
+					"query": "scene = 9059AF18D084",
+					"scene": 1047
+				},
+				{
+					"id": 1,
+					"name": "pages/index/shareGoodsDetail/main",
+					"pathName": "pages/index/shareGoodsDetail/main",
+					"query": "equip_sn=9059AF18D084",
+					"scene": 1012
+				},
+				{
+					"id": -1,
+					"name": "便民信息",
+					"pathName": "pages/indexPackage/pages/convenientHome/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "水电煤气",
+					"pathName": "pages/indexPackage/pages/convenient_1/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "机构选择",
+					"pathName": "pages/indexPackage/pages/waterPlant/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 7,
+					"name": "新增缴费账户",
+					"pathName": "pages/indexPackage/pages/addPayment/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "选择分组",
+					"pathName": "pages/indexPackage/pages/selectGroup/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 9,
+					"name": "水费充值",
+					"pathName": "pages/indexPackage/pages/waterFeeRecharge/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "电费充值",
+					"pathName": "pages/indexPackage/pages/electricityFeeRecharge/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "燃气充值",
+					"pathName": "pages/indexPackage/pages/gasRecharge/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "话费充值",
+					"pathName": "pages/indexPackage/pages/recharge/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "充值记录",
+					"pathName": "pages/indexPackage/pages/rechargeRecord/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "充值详情",
+					"pathName": "pages/indexPackage/pages/rechargeDetail/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "流量充值",
+					"pathName": "pages/indexPackage/pages/trafficRecharge/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "视频会员",
+					"pathName": "pages/indexPackage/pages/videoVip/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 17,
+					"name": "加油卡充值",
+					"pathName": "pages/indexPackage/pages/fuelCardRecharge/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "Q币充值",
+					"pathName": "pages/indexPackage/pages/qcoinRecharge/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "选择加油卡",
+					"pathName": "pages/indexPackage/pages/selectFuelCard/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "添加加油卡",
+					"pathName": "pages/indexPackage/pages/addFuelCard/main",
+					"query": "",
+					"scene": null
+				}
+			]
+		}
+	}
+}

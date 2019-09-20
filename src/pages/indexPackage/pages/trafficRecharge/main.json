@@ -1,0 +1,8 @@
+{
+    "navigationBarTitleText": "流量充值",
+    "navigationBarBackgroundColor": "#416ce3",
+    "navigationBarTextStyle": "white",
+    "usingComponents": {
+        "van-icon": "/static/vant/icon/index"
+    }
+}
