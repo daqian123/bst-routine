@@ -2,20 +2,76 @@
   <view class="rechargeRecord">
     <view class="cell-title">全部交易类型</view>
     <view class="list">
-      <view class="list-item" v-for="(item,index) in [1,2,3,4]" :key="index">
+      <view class="list-item" v-for="(item,index) in list" :key="index">
         <view class="list-item-left">
-          <view class="list-item-left-top">话费充值</view>
-          <view class="list-item-left-center">支付方式</view>
-          <view class="list-item-left-bottom">昨天：08：08</view>
+          <view class="list-item-left-top">{{item.title}}</view>
+          <view class="list-item-left-center">{{item.pay_type}}</view>
+          <view class="list-item-left-bottom">昨天：{{item.create_time}}</view>
         </view>
-        <view class="list-item-right">49.90</view>
+        <view class="list-item-right">{{item.amount}}</view>
       </view>
     </view>
   </view>
 </template>
 
 <script>
-export default {};
+import api from "@/api";
+export default {
+  data() {
+    return {
+      list: [],
+      loading: false,
+      noneData: false,
+      noneMore: false,
+      params: { page: 1 }
+    };
+  },
+  methods: {
+    refreshList() {
+      this.loading = true;
+      this.noneData = false;
+      this.noneMore = false;
+      api.rechargeRecord(this.params).then(res => {
+        this.loading = false;
+        let list = res.info;
+        if (list.length == 0) {
+          this.noneData = true;
+        }
+        this.params.page++;
+        this.list = list;
+      });
+    },
+    hotPosition() {
+      this.loading = true;
+      this.noneMore = false;
+      this.noneData = false;
+      api.rechargeRecord(this.params).then(res => {
+        this.loading = false;
+        let list = res.info;
+        if (list.length == 0) {
+          this.noneMore = true;
+        } else {
+          this.params.page++;
+          this.list = this.list.concat(list);
+        }
+      });
+    }
+  },
+  //下拉刷新
+  onPullDownRefresh() {
+    this.params.page = 1;
+    this.refreshList();
+    wx.stopPullDownRefresh();
+  },
+  //页面触底事件
+  onReachBottom() {
+    if (this.noneMore) return;
+    this.hotPosition();
+  },
+  onLoad() {
+    this.refreshList();
+  }
+};
 </script>
 <style lang="less" scoped>
 .cell-title {

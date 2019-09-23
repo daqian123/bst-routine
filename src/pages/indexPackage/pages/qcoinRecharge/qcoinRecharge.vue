@@ -5,31 +5,108 @@
       <view class="cell-right">充值记录</view>
     </view>
     <view class="form-input">
-      <input type="number" maxlength="11" class="input-value" placeholder="请输入充值号码" />
-      <icon type="clear" size="20" color="#eee" />
+      <input v-model="formData.qq" type="number" class="input-value" placeholder="请输入充值号码" />
+      <icon type="clear" size="20" color="#eee" v-if="formData.qq" @click="formData.qq=''" />
     </view>
     <view class="list">
       <view
         class="list-item"
+        @click="changeValue(item,index)"
         v-for="(item,index) in list"
         :key="index"
         :class="{active:active==index}"
       >
-        <view class="list-item-top">10 Q币</view>
+        <view class="list-item-top">{{item}}</view>
+      </view>
+      <view class="list-item" @click="customNum" :class="{active:active==-1}">
+        <view class="list-item-top">自定义</view>
       </view>
     </view>
-    <view class="price">9.8元</view>
-    <button class="add-btn">立即充值</button>
+    <view class="form-input" v-if="active==-1">
+      <input
+        v-model="count"
+        type="number"
+        :disabled="disabled"
+        placeholder="请输入要充值的Q币数量"
+        class="input-value"
+        @input="inputValue"
+      />
+      <icon type="clear" size="20" color="#eee" v-if="count" @click="count=null" />
+    </view>
+    <view class="price">{{formData.money}}</view>
+    <button class="add-btn" @click="formSubmit">立即充值</button>
   </view>
 </template>
 
 <script>
+import api from "@/api";
+import WxValidate from "@/utils/WxValidate";
+import { showToast, showSuccess, showModal } from "@/utils/pointDialog";
 export default {
   data() {
     return {
-      active: 0,
-      list: [1, 2, 3, 4, 5]
+      formData: {
+        qq: "",
+        money: "0.00"
+      },
+      count: null,
+      active: null,
+      discount: "",
+      disabled: false,
+      list: [10, 20, 30, 50, 100],
+      validate: ""
     };
+  },
+  methods: {
+    customNum() {
+      this.active = -1;
+      this.formData.money = "0.00";
+    },
+    inputValue() {
+      this.formData.money = (Number(this.count * this.discount) / 10).toFixed(
+        2
+      );
+    },
+    formSubmit() {
+      this.getMessage();
+      let { qq } = this.formData;
+      let params = this.active == -1 ? { qq, count: this.count } : { qq };
+      if (!this.validate.checkForm(params)) {
+        const error = this.validate.errorList[0];
+        showToast(error.msg);
+        return false;
+      }
+      api.qcoinOrder(this.formData).then(res => {});
+    },
+    changeValue(value, index) {
+      this.active = index;
+      this.formData.money = (Number(value * this.discount) / 10).toFixed(2);
+    },
+    getMessage() {
+      const message = {
+        qq: {
+          required: "请输入充值QQ账号",
+          rangelength: "请输入5到11位QQ账号"
+        },
+        count: { required: "请输入自定义Q币数量" }
+      };
+      const rules = {
+        qq: { required: true, rangelength: [5, 11] },
+        count: { required: true, min: 1 }
+      };
+      this.validate = new WxValidate(
+        this.active != -1 ? { qq: rules.qq } : rules,
+        this.active != -1 ? { qq: message.qq } : message
+      );
+    }
+  },
+  onLoad() {
+    this.formData.qq = "";
+    api.qcoinDiscount().then(res => {
+      this.discount = res.info.discount;
+      this.changeValue(this.list[0], 0);
+      this.getMessage();
+    });
   }
 };
 </script>
@@ -68,7 +145,7 @@ export default {
   padding: 0 24rpx;
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 31rpx;
+  // margin-bottom: 31rpx;
   &-item {
     .flexLayout(center, center, column);
     width: 220rpx;
@@ -108,6 +185,7 @@ export default {
   display: block;
   background: #416ce3;
   color: #fff;
+  font-size: 32rpx;
   margin: 40rpx 24rpx;
   height: 80rpx;
   line-height: 80rpx;

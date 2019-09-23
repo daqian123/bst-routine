@@ -12,6 +12,7 @@ import moduleComment from "./comment"
 import moduleShop from "./shop"
 import moduleShopManagement from "./shopManagement"
 import moduleProps from "./props"
+import moduleConvenient from "./convenient"
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
@@ -27,7 +28,8 @@ export const store = new Vuex.Store({
         moduleComment,
         moduleShop,
         moduleShopManagement,
-        moduleProps
+        moduleProps,
+        moduleConvenient
     },
     mutations: {
 

@@ -3,8 +3,8 @@
  */
 
 //测试地址域名
-const url = 'https://wechat.lexbst.com/bst-project'
-//const url = 'http://test.lexbst.com/bst-project'
+//const url = 'https://wechat.lexbst.com/bst-project'
+const url = 'http://test.lexbst.com/bst-project'
 // const url = 'http://192.168.2.190/bst-project';
 
 export default {
@@ -354,10 +354,6 @@ export default {
         return fetchApi("/couple/couple/hide", { param: {} }, 'GET')
     },
     //主页******************************************************************************************
-    //省市区列表
-    getProvinceCity() {
-        return fetchApi("/noauth/area", { param: {} }, 'GET')
-    },
     //便民信息分类
     getLiveCate(params) {
         return fetchApi("/live/liveCate_1", { param: params }, 'GET')
@@ -369,6 +365,67 @@ export default {
     //便民信息海报
     getInfoPoster(params) {
         return fetchApi("/card/infoPoster", { param: params }, 'GET')
+    },
+    //新增加油卡
+    addOil(params) {
+        return fetchApi("/saihe/oil/addOil", { param: params }, 'GET')
+    },
+    //我的加油卡
+    myOilList() {
+        return fetchApi("/saihe/oil/myOilList", { param: {} }, 'GET')
+    },
+    //删除油卡
+    delOil(params) {
+        return fetchApi("/saihe/oil/delOil", { param: params }, 'GET')
+    },
+    //油卡充值
+    oilOrder(params) {
+        return fetchApi("/saihe/oil/oilOrder", { param: params }, 'GET')
+    },
+    //q币折扣
+    qcoinDiscount() {
+        return fetchApi("/saihe/QQCoin/discount", { param: {} }, 'GET')
+    },
+    //q币充值订单
+    qcoinOrder(params) {
+        return fetchApi("/saihe/QQCoin/ordering", { param: params }, 'GET')
+    },
+    //话费套餐列表
+    phonePackage(params) {
+        return fetchApi("/saihe/phone/lists", { param: params }, 'GET')
+    },
+    //话费订单
+    phoneOrder(params) {
+        return fetchApi("/saihe/phone/ordering", { param: params }, 'GET')
+    },
+    //流量包套餐
+    trafficPackage(params) {
+        return fetchApi("/saihe/flow/lists", { param: params }, 'GET')
+    },
+    //流量订单
+    trafficOrder(params) {
+        return fetchApi("/saihe/flow/ordering", { param: params }, 'GET')
+    },
+    //视频会员包
+    videoPackage() {
+        return fetchApi("/saihe/video/lists", { param: {} }, 'GET')
+    },
+    //视频会员包
+    videoOrder(params) {
+        return fetchApi("/saihe/video/ordering", { param: params }, 'GET')
+    },
+    //便民信息首页
+    convenientHome() {
+        return fetchApi("/saihe/homes/index", { param: {} }, 'GET')
+    },
+    //充值记录
+    rechargeRecord(params) {
+        return fetchApi("/saihe/homes/lists", { param: params }, 'GET')
+    },
+    //主页******************************************************************************************
+    //省市区列表
+    getProvinceCity() {
+        return fetchApi("/noauth/area", { param: {} }, 'GET')
     },
     //语音搜索
     getVocieInfo(params) {

@@ -23,7 +23,8 @@
         "pages/fuelCardRecharge/main",
         "pages/qcoinRecharge/main",
         "pages/selectFuelCard/main",
-        "pages/addFuelCard/main"
+        "pages/addFuelCard/main",
+        "pages/payVideoVip/main"
       ]
     }
   ],

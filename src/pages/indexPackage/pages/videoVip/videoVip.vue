@@ -1,77 +1,59 @@
 <template>
   <view class="videoVip">
-    <view class="cell-title">优酷视频</view>
+    <img src="../../assets/img/info/video_vip_banner.png" class="banner" mode="widthFix" />
+    <view class="cell-title">分类</view>
     <view class="list">
-      <view class="list-item" v-for="(item,index) in list1" :key="index">
-        <img src="../../assets/img/info/yk_logo.png" class="list-logo1" />
-        <view class="list-item-top">{{item.time}}</view>
+      <view class="list-item" v-for="(item,index) in list" :key="index" @click="changeValue(item)">
+        <img src="../../assets/img/info/yk_logo.png" class="list-logo1" v-if="item.video_type==2" />
+        <img src="../../assets/img/info/tx_logo.png" class="list-logo2" v-if="item.video_type==3" />
+        <img src="../../assets/img/info/aqy_logo.png" class="list-logo3" v-if="item.video_type==1" />
+        <view class="list-item-top">{{item.type_text}}</view>
         <view class="list-item-center">
           ¥
-          <text class="font-xs">{{item.discount}}</text>
+          <text class="font-xs">{{item.discount_price}}</text>
         </view>
-        <view class="list-item-bottom">{{item.price}}/{{item.unit}}</view>
+        <view class="list-item-bottom">{{item.amount}}/{{item.txt}}</view>
       </view>
     </view>
-    <view class="cell-title">腾讯视频</view>
-    <view class="list">
-      <view class="list-item" v-for="(item,index) in list2" :key="index">
-        <img src="../../assets/img/info/tx_logo.png" class="list-logo2" />
-        <view class="list-item-top">{{item.time}}</view>
-        <view class="list-item-center">
-          ¥
-          <text class="font-xs">{{item.discount}}</text>
-        </view>
-        <view class="list-item-bottom">{{item.price}}/{{item.unit}}</view>
-      </view>
-    </view>
-    <view class="cell-title">爱奇艺视频</view>
-    <view class="list">
-      <view class="list-item" v-for="(item,index) in list3" :key="index">
-        <img src="../../assets/img/info/aqy_logo.png" class="list-logo3" />
-        <view class="list-item-top">{{item.time}}</view>
-        <view class="list-item-center">
-          ¥
-          <text class="font-xs">{{item.discount}}</text>
-        </view>
-        <view class="list-item-bottom">{{item.price}}/{{item.unit}}</view>
-      </view>
-    </view>
-    <button class="add-btn">立即充值</button>
-    <view class="fix-bottom">缴费记录</view>
+    <view class="fix-bottom">购买记录</view>
   </view>
 </template>
 
 <script>
+import api from "@/api";
+import { showToast, showSuccess, showModal } from "@/utils/pointDialog";
 export default {
   data() {
     return {
-      list1: [
-        { time: "周卡", discount: "5.72", price: "9", unit: "周" },
-        { time: "季卡", discount: "35.56", price: "56", unit: "季" },
-        { time: "年卡", discount: "125.73", price: "198", unit: "年" }
-      ],
-      list2: [
-        { time: "月卡", discount: "15", price: "20", unit: "月" },
-        { time: "季卡", discount: "43.5", price: "58", unit: "季" },
-        { time: "年卡", discount: "148.50", price: "198", unit: "年" }
-      ],
-      list3: [
-        { time: "月卡", discount: "12.90", price: "20", unit: "月" },
-        { time: "季卡", discount: "37.41", price: "58", unit: "季" },
-        { time: "年卡", discount: "127.71", price: "198", unit: "年" }
-      ]
+      list: []
     };
+  },
+  methods: {
+    changeValue(data) {
+      wx.navigateTo({
+        url: "../payVideoVip/main?data=" + JSON.stringify(data)
+      });
+    }
+  },
+  onLoad() {
+    api.videoPackage().then(res => {
+      this.list = res.info;
+    });
   }
 };
 </script>
 
 <style lang="less" scoped>
 .videoVip {
+  .banner {
+    width: 100%;
+    height: 208rpx;
+  }
   .cell-title {
     font-size: 32rpx;
     padding: 0 24rpx;
-    height: 70rpx;
-    line-height: 70rpx;
+    height: 90rpx;
+    line-height: 90rpx;
   }
   .list {
     display: flex;
@@ -121,19 +103,8 @@ export default {
       }
     }
   }
-  .add-btn {
-    display: block;
-    background: #416ce3;
-    color: #fff;
-    margin: 40rpx 24rpx;
-    height: 80rpx;
-    line-height: 80rpx;
-    letter-spacing: 8rpx;
-    &:active {
-      opacity: 0.8;
-    }
-  }
   .fix-bottom {
+    margin: 40rpx 0;
     font-size: 24rpx;
     color: #416ce3;
     text-align: center;

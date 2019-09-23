@@ -107,6 +107,7 @@ export default {
     display: block;
     background: #416ce3;
     color: #fff;
+    font-size: 32rpx;
     margin: 40rpx 24rpx;
     height: 80rpx;
     line-height: 80rpx;

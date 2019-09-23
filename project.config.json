@@ -42,7 +42,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 3,
+			"current": 19,
 			"list": [
 				{
 					"id": 0,
@@ -174,6 +174,13 @@
 					"id": -1,
 					"name": "添加加油卡",
 					"pathName": "pages/indexPackage/pages/addFuelCard/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "视频会员支付",
+					"pathName": "pages/indexPackage/pages/payVideoVip/main",
 					"query": "",
 					"scene": null
 				}

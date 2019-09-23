@@ -9,13 +9,13 @@
       <view class="title-tips">贴心服务助美好生活</view>
     </view>
     <view class="list">
-      <view class="list-item" v-for="(item,index) in list" :key="index">
+      <view class="list-item" v-for="(item,index) in list" :key="index" @click="navPath(item)">
         <view class="list-item-left">
           <img :src="item.icon" class="list-item-left-icon" />
         </view>
         <view class="list-item-right">
           <view class="list-title">{{item.title}}</view>
-          <view class="list-description">{{item.description}}</view>
+          <view class="list-description">{{item.desc}}</view>
         </view>
       </view>
     </view>
@@ -23,26 +23,43 @@
 </template>
 
 <script>
+import api from "@/api";
 export default {
   data() {
     return {
-      arr: [
-        { icon: "icon_1", title: "水电煤气", description: "便民舒心" },
-        { icon: "icon_2", title: "话费充值", description: "快速到账" },
-        { icon: "icon_3", title: "视频会员", description: "热销榜首" },
-        { icon: "icon_4", title: "流量充值", description: "超值精品" },
-        { icon: "icon_5", title: "Q币充值", description: "福利无限" },
-        { icon: "icon_6", title: "加油卡充值", description: "优惠多多" }
-      ]
+      list: []
     };
   },
-  computed: {
-    list() {
-      this.arr.forEach(item => {
-        item.icon = require(`../../assets/img/info/${item.icon}.png`);
-      });
-      return this.arr;
+  methods: {
+    navPath(item) {
+      let path;
+      switch (item.title) {
+        case "水电煤气":
+          path = "hydroelectricGas";
+          break;
+        case "话费充值":
+          path = "recharge";
+          break;
+        case "视频会员":
+          path = "videoVip";
+          break;
+        case "流量充值":
+          path = "trafficRecharge";
+          break;
+        case "Q币充值":
+          path = "qcoinRecharge";
+          break;
+        case "加油卡充值":
+          path = "fuelCardRecharge";
+          break;
+      }
+      wx.navigateTo({ url: `../${path}/main` });
     }
+  },
+  onLoad() {
+    api.convenientHome().then(res => {
+      this.list = res.info;
+    });
   }
 };
 </script>

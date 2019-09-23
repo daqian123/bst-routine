@@ -1,12 +1,16 @@
 <template>
   <view class="fuelCardRecharge">
     <img src="../../assets/img/info/card_banner.png" class="banner" />
-
     <view class="card-info">
-      <img src="../../assets/img/info/add_oil_card.png" class="card-btn" v-if="false" />
+      <img
+        src="../../assets/img/info/add_oil_card.png"
+        class="card-btn"
+        v-if="!oilInfo"
+        @click="addOil"
+      />
       <template v-else>
-        <img src="../../assets/img/info/oil_card.png" class="card-btn" />
-        <text class="card-num">74968456456456</text>
+        <img src="../../assets/img/info/oil_card.png" class="card-btn" @click="selectOil" />
+        <text class="card-num">{{oilInfo.oilcardnumber}}</text>
       </template>
     </view>
     <view class="list">
@@ -14,8 +18,9 @@
         class="list-item"
         v-for="(item,index) in list"
         :key="index"
-        :class="{active:index==0}"
-      >{{item.money}}元</view>
+        :class="{active:index==active}"
+        @click="active=index"
+      >{{item}}元</view>
     </view>
     <view class="cell-item">
       <view class="cell-item-left">优惠券</view>
@@ -27,26 +32,51 @@
     <view class="footer">
       <view class="footer-left">
         实付：
-        <text class="price">￥100</text>
+        <text class="price">￥{{list[active]}}</text>
       </view>
-      <view class="footer-right">立即充值</view>
+      <view class="footer-right btn-hover" @click="formSubmit(active)">立即充值</view>
     </view>
   </view>
 </template>
 
 <script>
+import api from "@/api";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      list: [
-        { money: 100 },
-        { money: 200 },
-        { money: 300 },
-        { money: 500 },
-        { money: 1000 },
-        { money: 2000 }
-      ]
+      active: 0,
+      list: [500, 1000],
+      info: []
     };
+  },
+  computed: {
+    ...mapGetters(["oilInfo"])
+  },
+  methods: {
+    addOil() {
+      wx.navigateTo({ url: "../addFuelCard/main" });
+    },
+    selectOil() {
+      wx.navigateTo({ url: "../selectFuelCard/main" });
+    },
+    formSubmit(active) {
+      if (!this.oilInfo) {
+        showToast("请先添加加油卡");
+        return;
+      }
+      let params = {
+        amount: this.list[active],
+        oilcardnumber: this.oilInfo.oilcardnumber
+      };
+      api.oilOrder(params).then(res => {});
+    }
+  },
+  onShow() {
+    api.myOilList().then(res => {
+      let list = res.info;
+      this.$store.commit("setOilInfo", list.length > 0 ? list[0] : "");
+    });
   }
 };
 </script>
@@ -128,7 +158,6 @@ export default {
       color: #333;
       .price {
         color: #fb8e39;
-        font-size: 24rpx;
       }
     }
     &-right {

@@ -1,46 +1,77 @@
 <template>
   <view class="selectFuelCard">
-    <view class="cell-group" v-if="list.length<0">
-      <view class="cell-item" v-for="(item,index) in list" :key="index">
-        <view class="cell-left">张三</view>
-        <view class="cell-right">
-          <view class="cell-right-value">156456465456456</view>&nbsp;
-          <i-radio-group :current="current" @change="current=index">
-            <i-radio :checked="index==current"></i-radio>
-          </i-radio-group>
-        </view>
-      </view>
+    <view class="cell-group" v-if="list.length>0">
+      <block v-for="(item,index) in list" :key="index">
+        <i-swipeout i-class="swipeout-border" :actions="actions" @change="delOil(index,item.id)">
+          <view slot="content">
+            <view class="cell-item" @click.stop="selectOil(item)">
+              <view class="cell-left">{{item.username}}</view>
+              <view class="cell-right">
+                <view class="cell-right-value">{{item.oilcardnumber}}</view>&nbsp;
+              </view>
+            </view>
+          </view>
+        </i-swipeout>
+      </block>
     </view>
-    <view class="empty">
+    <view class="empty" v-else>
       <img src="../../assets/img/info/noneData.png" class="noneData" />
       <view class="empty-tips">暂无搜索记录</view>
     </view>
-    <button class="add-btn">添加加油卡</button>
+    <button class="add-btn" @click="addOil">添加加油卡</button>
   </view>
 </template>
 
 <script>
+import api from "@/api";
+import { showSuccess } from "@/utils/pointDialog";
 export default {
   data() {
     return {
-      current: 0,
-      list: [1, 2, 2]
+      list: [],
+      actions: [
+        {
+          name: "删除",
+          color: "#fff",
+          fontsize: "16",
+          width: 100,
+          background: "#f52533"
+        }
+      ]
     };
+  },
+  methods: {
+    delOil(index, oid) {
+      api.delOil({ oid }).then(res => {
+        showSuccess("已删除");
+        this.list.splice(index, 1);
+      });
+    },
+    addOil() {
+      wx.navigateTo({ url: "../addFuelCard/main" });
+    },
+    selectOil(item) {
+      this.$store.commit("setOilInfo", item);
+      wx.navigateBack({ delta: 1 });
+    }
+  },
+  onShow() {
+    api.myOilList().then(res => {
+      this.list = res.info;
+    });
   }
 };
 </script>
-
 <style lang="less" scoped>
 .selectFuelCard {
   border-top: 31rpx solid #f8f6f9;
   .cell-group {
+    margin: 0 24rpx;
     .cell-item {
       display: flex;
       justify-content: space-between;
-      height: 100rpx;
-      line-height: 100rpx;
-      margin: 0 24rpx;
-      border-bottom: 1px solid #eee;
+      height: 52rpx;
+      line-height: 52rpx;
       box-sizing: border-box;
     }
     .cell-right {
@@ -67,6 +98,7 @@ export default {
     display: block;
     background: #416ce3;
     color: #fff;
+    font-size: 32rpx;
     margin: 121rpx 24rpx 40rpx 24rpx;
     height: 80rpx;
     line-height: 80rpx;
