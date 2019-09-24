@@ -1,11 +1,11 @@
 <template>
   <view class="selectGroup">
     <view class="cell" v-for="(item,index) in list" :key="index">
-      <view class="cell-left">{{item.name}}</view>
+      <view class="cell-left">{{item}}</view>
       <view class="cell-right">
-        <input type="text" placeholder="请输入分组名称" class="input-r" v-if="item.name=='自定义'" />
+        <!-- <input type="text" placeholder="请输入分组名称" class="input-r" v-if="item.name=='自定义'" /> -->
         <i-radio-group :current="current" @change="changeRadio(index)" i-class="cell-radio">
-          <i-radio :checked="item.id==current"></i-radio>
+          <i-radio :checked="index==current"></i-radio>
         </i-radio-group>
       </view>
     </view>
@@ -13,22 +13,23 @@
 </template>
 
 <script>
+import api from "@/api";
 export default {
   data() {
     return {
-      current: 0,
-      list: [
-        { id: 0, name: "我家" },
-        { id: 1, name: "父母" },
-        { id: 2, name: "房东" },
-        { id: 3, name: "自定义" }
-      ]
+      current: 1,
+      list: []
     };
   },
   methods: {
     changeRadio(index) {
       this.current = index;
     }
+  },
+  onLoad() {
+    api.selectGroup().then(res => {
+      this.list = res.info;
+    });
   }
 };
 </script>

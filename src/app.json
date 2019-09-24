@@ -9,7 +9,7 @@
       "pages": [
         "pages/convenientHome/main",
         "pages/hydroelectricGas/main",
-        "pages/waterPlant/main",
+        "pages/institution/main",
         "pages/addPayment/main",
         "pages/selectGroup/main",
         "pages/waterFeeRecharge/main",

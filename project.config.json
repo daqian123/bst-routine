@@ -42,7 +42,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 19,
+			"current": 4,
 			"list": [
 				{
 					"id": 0,
@@ -73,9 +73,9 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 4,
 					"name": "机构选择",
-					"pathName": "pages/indexPackage/pages/waterPlant/main",
+					"pathName": "pages/indexPackage/pages/institution/main",
 					"query": "",
 					"scene": null
 				},

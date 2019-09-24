@@ -1,7 +1,7 @@
 <template>
   <view class="rechargeWaterFee page-bg">
     <view class="head">
-      <img src="../../assets/img/info/convenient1_icon_5.png" class="head-icon" />&nbsp;电费
+      <img src="../../assets/img/info/convenient1_icon_5.png" class="head-icon" />&nbsp;燃气费
     </view>
     <view class="cell-group">
       <view class="cell-item">
@@ -36,14 +36,37 @@
       </view>
     </view>
     <button class="add-btn">立即充值</button>
-    <view class="fix-bottom">缴费记录</view>
+    <navigator url="../rechargeRecord/main">
+      <view class="fix-bottom">缴费记录</view>
+    </navigator>
   </view>
 </template>
 
 <script>
+import api from "@/api";
+import { showModal } from "@/utils/pointDialog";
 export default {
   data() {
     return {};
+  },
+  methods: {
+    queryPosts(id) {
+      api
+        .queryPosts({ id })
+        .then(res => {})
+        .catch(err => {
+          wx.hideToast();
+          showModal(res => {
+            if (res.confirm) {
+              this.queryPosts();
+            }
+          }, "查询失败，是否继续查询");
+        });
+    }
+  },
+  async onLoad(options) {
+    await api.queryPost({ id: options.id });
+    this.queryPosts(options.id);
   }
 };
 </script>

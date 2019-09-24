@@ -422,6 +422,30 @@ export default {
     rechargeRecord(params) {
         return fetchApi("/saihe/homes/lists", { param: params }, 'GET')
     },
+    //水电煤气
+    householdlists() {
+        return fetchApi("/saihe/household/householdlists", { param: {} }, 'GET')
+    },
+    //水电煤气机构查询
+    institutions(params) {
+        return fetchApi("/saihe/household/institutions", { param: params }, 'GET')
+    },
+    //水电煤气查询
+    queryPost(params) {
+        return fetchApi("/saihe/household/queryPost", { param: params }, 'GET')
+    },
+    //轮询水电煤气查询
+    queryPosts(params) {
+        return fetchApi("/saihe/household/query", { param: params }, 'GET')
+    },
+    //选择分组
+    selectGroup() {
+        return fetchApi("/saihe/household/groups", { param: {} }, 'GET')
+    },
+    //新增缴费账户
+    addhHydroelectricGas(params) {
+        return fetchApi("/saihe/household/addInfo", { param: params }, 'GET')
+    },
     //主页******************************************************************************************
     //省市区列表
     getProvinceCity() {

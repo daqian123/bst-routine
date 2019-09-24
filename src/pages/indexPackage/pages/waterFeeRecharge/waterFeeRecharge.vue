@@ -22,14 +22,21 @@
       </view>
     </view>
     <button class="add-btn">立即充值</button>
-    <view class="fix-bottom">缴费记录</view>
+    <navigator url="../rechargeRecord/main">
+      <view class="fix-bottom">缴费记录</view>
+    </navigator>
   </view>
 </template>
 
 <script>
+import api from "@/api";
 export default {
   data() {
     return {};
+  },
+  async onLoad(options) {
+    await api.queryPost({ id: options.id });
+    let code = await api.queryPosts({ id: options.id });
   }
 };
 </script>
