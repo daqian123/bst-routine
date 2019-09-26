@@ -1,7 +1,7 @@
 import api from "@/api/index"
 import { store } from "@/store/store"
-import { getArray } from "@/utils/public"
-import { showToast } from "@/utils/pointDialog"
+import { getArray } from "@/utils/util"
+import common from "@/utils/common"
 /**
  * 获取公用接口数据存入缓存
  * */
@@ -42,7 +42,7 @@ const getSystemInfo = function () {
 const getAreaCode = (arr, fn) => {
   api.getAreaCode({ city_name: arr[1], area_name: arr[2] }).then(
     res => { fn(res) },
-    err => { showToast("获取地区信息失败，请更换其他地址"); }
+    () => { common.showToast("获取地区信息失败，请更换其他地址"); }
   );
 }
 const getProvinceCity = () => {

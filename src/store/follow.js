@@ -1,6 +1,7 @@
 import Vue from "vue"
 import { store } from "@/store/store"
-import api from "@/api/index";
+import common from "@/utils/common"
+import api from "@/api";
 const moduleFollow = {
     state: {
         followList: [],//收藏信息、商户
@@ -38,7 +39,7 @@ const moduleFollow = {
                 state.followLoading = false;
                 let list = res.info.list;
                 list.forEach(item => {
-                    item.hideMobile = Vue.prototype.setMobile(item.mobile).hideMobile;
+                    item.hideMobile = common.setMobile(item.mobile).hideMobile;
                 });
                 if (list.length == 0 && state.followList.length == 0) {
                     state.followNoneData = true;

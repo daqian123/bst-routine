@@ -23,8 +23,7 @@
 </template>
 
 <script>
-import api from "@/api";
-import { showSuccess } from "@/utils/pointDialog";
+
 export default {
   data() {
     return {
@@ -42,8 +41,8 @@ export default {
   },
   methods: {
     delOil(index, oid) {
-      api.delOil({ oid }).then(res => {
-        showSuccess("已删除");
+      this.$api.delOil({ oid }).then(res => {
+        this.$showSuccess("已删除");
         this.list.splice(index, 1);
       });
     },
@@ -56,7 +55,7 @@ export default {
     }
   },
   onShow() {
-    api.myOilList().then(res => {
+    this.$api.myOilList().then(res => {
       this.list = res.info;
     });
   }

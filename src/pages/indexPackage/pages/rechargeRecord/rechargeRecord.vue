@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import api from "@/api";
+
 export default {
   data() {
     return {
@@ -31,7 +31,7 @@ export default {
       this.loading = true;
       this.noneData = false;
       this.noneMore = false;
-      api.rechargeRecord(this.params).then(res => {
+      this.$api.rechargeRecord(this.params).then(res => {
         this.loading = false;
         let list = res.info;
         if (list.length == 0) {
@@ -45,7 +45,7 @@ export default {
       this.loading = true;
       this.noneMore = false;
       this.noneData = false;
-      api.rechargeRecord(this.params).then(res => {
+      this.$api.rechargeRecord(this.params).then(res => {
         this.loading = false;
         let list = res.info;
         if (list.length == 0) {

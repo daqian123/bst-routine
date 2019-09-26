@@ -1,9 +1,7 @@
 
-import api from "@/api/index"
-import Vue from "vue"
-import { showLoading, scanCode } from "@/utils/pointDialog"
+import api, { getRegeo } from "@/api"
+import common from "@/utils/common"
 import { store } from "@/store/store"
-import { getRegeo } from "@/api/index";
 const moduleIndex = {
     state: {
         infoLoading: false,//信息和商户主页列表加载状态
@@ -56,7 +54,7 @@ const moduleIndex = {
     mutations: {
         //扫码
         scanMiniCode(state) {
-            scanCode()
+            common.scanCode()
         },
         getColumnCate(state, list) {
             state.cateList = list
@@ -156,7 +154,7 @@ const moduleIndex = {
         },
         //条件查询默认第一页
         getActiveInfo(state) {
-            showLoading("加载中")
+            common.showLoading("加载中")
             state.infoParam.page = 1
             state.infoParam.area_code = wx.getStorageSync("address").code
             store.commit("setInfoLoading")
@@ -164,7 +162,7 @@ const moduleIndex = {
         },
         //条件查询默认第一页
         getActiveShopInfo(state) {
-            showLoading("加载中")
+            common.showLoading("加载中")
             let { code, lat, lng } = wx.getStorageSync("address")
             state.shopParam.lat = lat
             state.shopParam.lng = lng
@@ -205,7 +203,7 @@ const moduleIndex = {
                 state.shopLoading = false
                 let data = res.info
                 data.list.forEach(item => {
-                    item.hideMobile = Vue.prototype.setMobile(item.mobile).hideMobile;
+                    item.hideMobile = common.setMobile(item.mobile).hideMobile;
                 });
                 data.message.forEach(list => {
                     list.title = list.title.substring(3, list.title.length - 4);
@@ -236,7 +234,7 @@ const moduleIndex = {
                 state.shopLoading = false
                 let data = res.info
                 data.list.forEach(item => {
-                    item.hideMobile = Vue.prototype.setMobile(item.mobile).hideMobile;
+                    item.hideMobile = common.setMobile(item.mobile).hideMobile;
                 });
                 if (data.list.length == 0) {
                     state.shopNoneMore = true

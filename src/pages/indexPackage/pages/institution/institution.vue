@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import api from "@/api";
+
 export default {
   data() {
     return {
@@ -46,7 +46,7 @@ export default {
       wx.navigateBack({ delta: 1 });
     },
     institutions(area_code) {
-      api.institutions({ area_code, type: this.type }).then(res => {
+      this.$api.institutions({ area_code, type: this.type }).then(res => {
         this.list = res.info;
       });
     }

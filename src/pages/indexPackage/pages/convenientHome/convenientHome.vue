@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import api from "@/api";
+
 export default {
   data() {
     return {
@@ -57,7 +57,7 @@ export default {
     }
   },
   onLoad() {
-    api.convenientHome().then(res => {
+    this.$api.convenientHome().then(res => {
       this.list = res.info;
     });
   }

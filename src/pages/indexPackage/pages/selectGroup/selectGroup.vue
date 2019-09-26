@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import api from "@/api";
+
 export default {
   data() {
     return {
@@ -27,7 +27,7 @@ export default {
     }
   },
   onLoad() {
-    api.selectGroup().then(res => {
+    this.$api.selectGroup().then(res => {
       this.list = res.info;
     });
   }

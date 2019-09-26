@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import api from "@/api";
+
 import { mapGetters } from "vuex";
 export default {
   data() {
@@ -69,11 +69,11 @@ export default {
         amount: this.list[active],
         oilcardnumber: this.oilInfo.oilcardnumber
       };
-      api.oilOrder(params).then(res => {});
+      this.$api.oilOrder(params).then(res => {});
     }
   },
   onShow() {
-    api.myOilList().then(res => {
+    this.$api.myOilList().then(res => {
       let list = res.info;
       this.$store.commit("setOilInfo", list.length > 0 ? list[0] : "");
     });

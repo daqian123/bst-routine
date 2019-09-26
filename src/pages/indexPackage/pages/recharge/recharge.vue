@@ -66,8 +66,7 @@
 </template>
 
 <script>
-import api from "@/api";
-import { showToast, showSuccess, showModal } from "@/utils/pointDialog";
+
 export default {
   data() {
     return {
@@ -93,17 +92,17 @@ export default {
   },
   methods: {
     phoneContact() {
-      showToast("小程序暂不支持通讯录功能");
+      this.$showToast("小程序暂不支持通讯录功能");
       return;
     },
     openModal() {
       let { mobile } = this.formData;
       if (!mobile) {
-        showToast("请输入手机号码");
+        this.$showToast("请输入手机号码");
         return;
       }
       if (!this.regexp.test(mobile)) {
-        showToast("请输入正确的手机号码");
+        this.$showToast("请输入正确的手机号码");
         return;
       }
       this.visible = true;
@@ -111,7 +110,7 @@ export default {
     async inputValue() {
       let { mobile } = this.formData;
       if (this.regexp.test(mobile)) {
-        await api.phonePackage({ mobile }).then(res => {
+        await this.$api.phonePackage({ mobile }).then(res => {
           this.list = res.info;
         });
       }
@@ -125,7 +124,7 @@ export default {
       this.formData.money = info.price;
     },
     formSubmit() {
-      api.phoneOrder(this.formData).then(res => {});
+      this.$api.phoneOrder(this.formData).then(res => {});
     }
   },
   onLoad() {

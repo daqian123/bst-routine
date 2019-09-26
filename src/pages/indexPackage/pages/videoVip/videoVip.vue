@@ -20,8 +20,7 @@
 </template>
 
 <script>
-import api from "@/api";
-import { showToast, showSuccess, showModal } from "@/utils/pointDialog";
+
 export default {
   data() {
     return {
@@ -36,7 +35,7 @@ export default {
     }
   },
   onLoad() {
-    api.videoPackage().then(res => {
+    this.$api.videoPackage().then(res => {
       this.list = res.info;
     });
   }

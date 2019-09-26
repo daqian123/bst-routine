@@ -39,15 +39,15 @@
 </template>
 
 <script>
-import api from "@/api";
+
 import WxValidate from "@/utils/WxValidate";
-import { showToast, showSuccess, showModal } from "@/utils/pointDialog";
 export default {
   data() {
     return {
       formData: {
         qq: "",
-        money: "0.00"
+        money: "0.00",
+        number: null
       },
       count: null,
       active: null,
@@ -66,6 +66,7 @@ export default {
       this.formData.money = (Number(this.count * this.discount) / 10).toFixed(
         2
       );
+      this.formData.number = this.count;
     },
     formSubmit() {
       this.getMessage();
@@ -73,13 +74,14 @@ export default {
       let params = this.active == -1 ? { qq, count: this.count } : { qq };
       if (!this.validate.checkForm(params)) {
         const error = this.validate.errorList[0];
-        showToast(error.msg);
+        this.$showToast(error.msg);
         return false;
       }
-      api.qcoinOrder(this.formData).then(res => {});
+      this.$api.qcoinOrder(this.formData).then(res => {});
     },
     changeValue(value, index) {
       this.active = index;
+      this.formData.number = value;
       this.formData.money = (Number(value * this.discount) / 10).toFixed(2);
     },
     getMessage() {
@@ -102,7 +104,7 @@ export default {
   },
   onLoad() {
     this.formData.qq = "";
-    api.qcoinDiscount().then(res => {
+    this.$api.qcoinDiscount().then(res => {
       this.discount = res.info.discount;
       this.changeValue(this.list[0], 0);
       this.getMessage();

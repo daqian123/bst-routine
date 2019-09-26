@@ -57,10 +57,8 @@
 </template>
 
 <script>
-import api from "@/api";
 import { mapGetters } from "vuex";
 import WxValidate from "@/utils/WxValidate";
-import { showToast, showSuccess, showModal } from "@/utils/pointDialog";
 export default {
   data() {
     return {
@@ -90,16 +88,16 @@ export default {
       console.log(this.formData);
       if (!this.validate.checkForm(this.formData)) {
         const error = this.validate.errorList[0];
-        showToast(error.msg);
+        this.$showToast(error.msg);
         return false;
       }
       if (!this.checked) {
-        showToast("请选择协议");
+        this.$showToast("请选择协议");
         return;
       }
-      api.addhHydroelectricGas(this.formData).then(res => {
-        showSuccess("添加成功");
-        showModal(res => {
+      this.$api.addhHydroelectricGas(this.formData).then(res => {
+        this.$showSuccess("添加成功");
+        this.$showModal(res => {
           if (res.confirm) {
             this.formatData();
           } else {
@@ -138,7 +136,7 @@ export default {
     this.validate = new WxValidate(rules, message);
     this.type = options.type;
     this.formatData();
-    api.selectGroup().then(res => {
+    this.$api.selectGroup().then(res => {
       this.range = res.info;
     });
   }

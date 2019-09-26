@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import api from "@/api";
+
 export default {
   data() {
     return {
@@ -101,7 +101,7 @@ export default {
     }
   },
   onShow() {
-    api.householdlists().then(res => {
+    this.$api.householdlists().then(res => {
       this.list = res.info;
     });
   }

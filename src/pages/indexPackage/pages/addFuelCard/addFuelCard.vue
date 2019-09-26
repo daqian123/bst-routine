@@ -47,9 +47,7 @@
 </template>
 
 <script>
-import api from "@/api";
 import WxValidate from "@/utils/WxValidate";
-import { showToast, showSuccess, showModal } from "@/utils/pointDialog";
 export default {
   data() {
     return {
@@ -66,12 +64,12 @@ export default {
       console.log(e);
       if (!this.validate.checkForm(e.mp.detail.value)) {
         const error = this.validate.errorList[0];
-        showToast(error.msg);
+        this.$showToast(error.msg);
         return false;
       }
-      api.addOil(this.formData).then(res => {
-        showSuccess("添加成功");
-        showModal(res => {
+      this.$api.addOil(this.formData).then(res => {
+        this.$showSuccess("添加成功");
+        this.$showModal(res => {
           if (res.confirm) {
             this.formatData();
           } else {

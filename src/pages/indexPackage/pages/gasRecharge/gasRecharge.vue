@@ -6,46 +6,70 @@
     <view class="cell-group">
       <view class="cell-item">
         <view class="label">缴费单位</view>
-        <view class="input-right">合肥供电</view>
+        <view class="input-right">{{info.title}}</view>
       </view>
       <view class="cell-item">
         <view class="label">缴费户号</view>
-        <view class="input-right">456764564</view>
-      </view>
-      <view class="cell-item">
-        <view class="label">户名</view>
-        <view class="input-right">大钱</view>
-      </view>
-      <view class="cell-item">
-        <view class="label">住址</view>
-        <view class="input-right">南翔汽车城</view>
-      </view>
-      <view class="cell-item">
-        <view class="label">当前可用余额</view>
-        <view class="input-right">0</view>
+        <view class="input-right">{{info.account}}</view>
       </view>
       <view class="cell-item">
         <view class="label">当前欠费金额</view>
-        <view class="input-right">56</view>
-      </view>
-      <view class="cell-item">
-        <view class="label">充值金额</view>
-        <view class="input-right">
-          <input type="text" placeholder="请输入充值金额" class="input-value" />
-        </view>
+        <view class="input-right">{{info.billamount}}</view>
       </view>
     </view>
-    <button class="add-btn">立即充值</button>
+    <button class="add-btn" @click="recharge(info.billamount)">立即缴费</button>
     <navigator url="../rechargeRecord/main">
       <view class="fix-bottom">缴费记录</view>
     </navigator>
   </view>
 </template>
-
 <script>
 export default {
   data() {
-    return {};
+    return {
+      info: {},
+      formData: {}
+    };
+  },
+  methods: {
+    queryPosts(id) {
+      this.$showLoading("正在查询");
+      this.$api.queryPosts({ id }).then(res => {
+        let { status } = res.info;
+        switch (status) {
+          case -1:
+            setTimeout(() => {
+              this.queryPosts();
+            }, 3000);
+            break;
+          case 0:
+            wx.hideLoading();
+            this.info = res.info;
+            break;
+          case 1:
+            wx.hideLoading();
+            this.$showToast("账号查询错误，请仔细核对账号");
+            this.info = res.info;
+            break;
+        }
+      });
+    },
+    recharge(amount) {
+      if (!amount) {
+        this.$showToast("账号查询错误，请仔细核对账号");
+        return;
+      }
+      this.formData.amount = amount;
+      this.$api.addHydroelectricGasOrder(this.formData).then(res => {});
+    }
+  },
+  async onLoad(options) {
+    this.formData = {
+      amount: null,
+      id: options.id
+    };
+    await this.$api.queryPost({ id: options.id });
+    this.queryPosts(options.id);
   }
 };
 </script>

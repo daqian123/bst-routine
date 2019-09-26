@@ -6,22 +6,18 @@
     <view class="cell-group">
       <view class="cell-item cell-item-xs">
         <view class="label">应缴金额</view>
-        <view class="input-right">168</view>
+        <view class="input-right">{{info.billamount}}</view>
       </view>
       <view class="cell-item">
         <view class="label">缴费单位</view>
-        <view class="input-right">长丰自来水厂</view>
+        <view class="input-right">{{info.title}}</view>
       </view>
       <view class="cell-item">
         <view class="label">缴费户号</view>
-        <view class="input-right">765746456</view>
-      </view>
-      <view class="cell-item">
-        <view class="label">户名</view>
-        <view class="input-right">大钱</view>
+        <view class="input-right">{{info.account}}</view>
       </view>
     </view>
-    <button class="add-btn">立即充值</button>
+    <button class="add-btn" @click="recharge(info.billamount)">立即缴费</button>
     <navigator url="../rechargeRecord/main">
       <view class="fix-bottom">缴费记录</view>
     </navigator>
@@ -29,14 +25,52 @@
 </template>
 
 <script>
-import api from "@/api";
 export default {
   data() {
-    return {};
+    return {
+      info: {},
+      formData: {}
+    };
+  },
+  methods: {
+    queryPosts(id) {
+      this.$showLoading("正在查询");
+      this.$api.queryPosts({ id }).then(res => {
+        let { status } = res.info;
+        switch (status) {
+          case -1:
+            setTimeout(() => {
+              this.queryPosts();
+            }, 3000);
+            break;
+          case 0:
+            wx.hideLoading();
+            this.info = res.info;
+            break;
+          case 1:
+            wx.hideLoading();
+            this.$showToast("账号查询错误，请仔细核对账号");
+            this.info = res.info;
+            break;
+        }
+      });
+    },
+    recharge(amount) {
+      if (!amount) {
+        this.$showToast("账号查询错误，请仔细核对账号");
+        return;
+      }
+      this.formData.amount = amount;
+      this.$api.addHydroelectricGasOrder(this.formData).then(res => {});
+    }
   },
   async onLoad(options) {
-    await api.queryPost({ id: options.id });
-    let code = await api.queryPosts({ id: options.id });
+    this.formData = {
+      amount: null,
+      id: options.id
+    };
+    await this.$api.queryPost({ id: options.id });
+    this.queryPosts(options.id);
   }
 };
 </script>

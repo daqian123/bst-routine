@@ -1,7 +1,7 @@
 import api from "@/api"
 import { store } from "./store"
 import Vue from "vue"
-import { showModal, showSuccess, showToast } from "@/utils/pointDialog";
+import common from "@/utils/common";
 const moduleShopManagement = {
     state: {
         totalCoupon: 0,//优惠券总数
@@ -133,13 +133,13 @@ const moduleShopManagement = {
                 }
             });
             if (id.length == 0) {
-                showToast("请选择商品");
+                common.showToast("请选择商品");
                 return;
             }
-            showModal(res => {
-                if (res.confirm) {
+            common.showModal(confirm => {
+                if (confirm) {
                     api.deleteCommodity({ id: id.join() }).then(res => {
-                        showSuccess("已删除");
+                        common.showSuccess("已删除");
                         store.commit("getMyShopGoods")
                     });
                 }
@@ -201,13 +201,13 @@ const moduleShopManagement = {
                 }
             });
             if (c_ids.length == 0) {
-                showToast("请选择优惠券");
+                common.showToast("请选择优惠券");
                 return;
             }
-            showModal(res => {
-                if (res.confirm) {
+            common.showModal(confirm => {
+                if (confirm) {
                     api.deleteShopCoupons({ c_ids, shop_id }).then(res => {
-                        showSuccess("已删除");
+                        common.showSuccess("已删除");
                         state.totalCoupon = state.totalCoupon - c_ids.length
                         state.couponList = state.couponList.filter(item => {
                             return item.manageStatus;
@@ -237,13 +237,13 @@ const moduleShopManagement = {
                 }
             });
             if (a_ids.length == 0) {
-                showToast("请选择活动");
+                common.showToast("请选择活动");
                 return;
             }
-            showModal(res => {
-                if (res.confirm) {
+            common.showModal(confirm => {
+                if (confirm) {
                     api.deleteActivity({ a_ids, shop_id }).then(res => {
-                        showSuccess("已删除");
+                        common.showSuccess("已删除");
                         state.totalActivity = state.totalActivity - a_ids.length
                         state.activityList = state.activityList.filter(item => {
                             return item.manageStatus;
@@ -305,10 +305,10 @@ const moduleShopManagement = {
             if (type == 4) params.cancel_reason = item.reason
             switch (type) {
                 case 1:
-                    showModal(res => {
-                        if (res.confirm) {
+                    common.showModal(confirm => {
+                        if (confirm) {
                             api.updateOrderStatus(params).then(res => {
-                                showSuccess("已取消");
+                                common.showSuccess("已取消");
                                 state.orderNoneMore_sm = false;
                                 state.orderList_sm.splice(index, 1)
                             })
@@ -316,10 +316,10 @@ const moduleShopManagement = {
                     }, "确认取消订单吗");
                     break;
                 case 2:
-                    showModal(res => {
-                        if (res.confirm) {
+                    common.showModal(confirm => {
+                        if (confirm) {
                             api.updateOrderStatus(params).then(res => {
-                                showSuccess("已删除")
+                                common.showSuccess("已删除")
                                 state.orderNoneMore_sm = false;
                                 state.orderList_sm.splice(index, 1)
                             })
@@ -329,10 +329,10 @@ const moduleShopManagement = {
                     break;
                 case 3:
                     let text = '确认发货吗'
-                    showModal(res => {
-                        if (res.confirm) {
+                    common.showModal(confirm => {
+                        if (confirm) {
                             api.updateOrderStatus(params).then(res => {
-                                showSuccess('已发货')
+                                common.showSuccess('已发货')
                                 state.orderNoneMore_sm = false;
                                 state.orderList_sm.splice(index, 1)
                             })
@@ -341,7 +341,7 @@ const moduleShopManagement = {
                     break;
                 case 4:
                     api.updateOrderStatus(params).then(res => {
-                        showSuccess("提交成功")
+                        common.showSuccess("提交成功")
                         state.orderNoneMore_sm = false;
                         state.orderList_sm.splice(index, 1)
                         setTimeout(() => {
@@ -350,10 +350,10 @@ const moduleShopManagement = {
                     })
                     break;
                 case 5:
-                    showModal(res => {
-                        if (res.confirm) {
+                    common.showModal(confirm => {
+                        if (confirm) {
                             api.updateOrderStatus(params).then(res => {
-                                showSuccess("已完成退款")
+                                common.showSuccess("已完成退款")
                                 state.orderNoneMore_sm = false;
                                 Vue.set(state.orderList_sm[index], 'status', 5)
                             })
@@ -361,10 +361,10 @@ const moduleShopManagement = {
                     }, `确认退还${item.amount}元给该用户吗？`);
                     break;
                 case 6:
-                    showModal(res => {
-                        if (res.confirm) {
+                    common.showModal(confirm => {
+                        if (confirm) {
                             api.updateOrderStatus(params).then(res => {
-                                showSuccess("已完成")
+                                common.showSuccess("已完成")
                                 state.orderNoneMore_sm = false;
                                 Vue.set(state.orderList_sm[index], 'status', 6)
                             })
@@ -372,8 +372,8 @@ const moduleShopManagement = {
                     }, `确认拒绝退款吗？`);
                     break;
                 case 7:
-                    showModal(res => {
-                        if (res.confirm) {
+                    common.showModal(confirm => {
+                        if (confirm) {
                             let param = { order_id }
                             if (data.formData) {
                                 let { express_company, express_sn } = data.formData
@@ -383,7 +383,7 @@ const moduleShopManagement = {
                                 param.scanning = 1
                             }
                             api.delivery(param).then(res => {
-                                showSuccess("已确认发货")
+                                common.showSuccess("已确认发货")
                                 state.logisticsDialog = false
                                 state.orderList_sm.splice(index, 1)
                                 setTimeout(() => {

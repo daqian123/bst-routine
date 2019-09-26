@@ -91,8 +91,8 @@ export default {
         return fetchApi("/local/tribe/delTribe", { param: params }, 'GET')
     },
     //部落详情
-    groupDetails(params) {
-        return fetchApi("/local/tribeCate/details", { param: params }, 'GET')
+    groupDetails() {
+        return fetchApi("/local/tribeCate/details", { param: {} }, 'GET')
     },
     //我的话题信息
     myTribeInfo(params) {
@@ -438,6 +438,10 @@ export default {
     queryPosts(params) {
         return fetchApi("/saihe/household/query", { param: params }, 'GET')
     },
+    //添加水电煤气订单
+    addHydroelectricGasOrder(params) {
+        return fetchApi("/saihe/household/addOrder", { param: params }, 'GET')
+    },
     //选择分组
     selectGroup() {
         return fetchApi("/saihe/household/groups", { param: {} }, 'GET')
@@ -450,6 +454,18 @@ export default {
     //省市区列表
     getProvinceCity() {
         return fetchApi("/noauth/area", { param: {} }, 'GET')
+    },
+    //便民信息分类
+    getLiveCate(params) {
+        return fetchApi("/live/liveCate_1", { param: params }, 'GET')
+    },
+    //便民信息列表信息
+    getLiveData(params) {
+        return fetchApi("/live/liveData_1", { param: params }, 'GET')
+    },
+    //便民信息海报
+    getInfoPoster(params) {
+        return fetchApi("/card/infoPoster", { param: params }, 'GET')
     },
     //语音搜索
     getVocieInfo(params) {
@@ -632,46 +648,6 @@ export default {
         return fetchApi("/tool/childCards", { param: params }, 'GET')
     },
     //视频********************************************************************************************************
-    //视频管理
-    addOrEditGoodsVideos(params) {
-        return fetchApi("/videos/GoodsVideos/addOrEditGoodsVideos", { param: params }, 'GET')
-    },
-    //获取帮卖商品列表
-    getGoodslists(params) {
-        return fetchApi("/videos/GoodsSelect/lists", { param: params }, 'GET')
-    },
-    //视频商城列表
-    videoLists(params) {
-        return fetchApi("/videos/GoodsVideos/videoLists", { param: params }, 'GET')
-    },
-    //我的视频列表
-    myVideos(params) {
-        return fetchApi("/videos/GoodsVideos/myVideos", { param: params }, 'GET')
-    },
-    //视频点赞
-    likeVideo(params) {
-        return fetchApi("/videos/VideoPraise/insert", { param: params }, 'GET')
-    },
-    //视频详情
-    videoDetail(params) {
-        return fetchApi("/videos/GoodsVideos/videoDetail", { param: params }, 'GET')
-    },
-    //视频评论
-    videoComment(params) {
-        return fetchApi("/comment/videoInsert", { param: params }, 'GET')
-    },
-    //视频评论列表
-    videoCommentList(params) {
-        return fetchApi("/comment/videoList", { param: params }, 'GET')
-    },
-    //我的视频
-    myVideos(params) {
-        return fetchApi("/videos/GoodsVideos/myVideos", { param: params }, 'GET')
-    },
-    //视频评论回复列表
-    videoReplyComment(params) {
-        return fetchApi("/comment/videoDetail", { param: params }, 'GET')
-    },
     //删除视频
     deleteVideo(params) {
         return fetchApi("/videos/GoodsVideos/deleteVideo", { param: params }, 'GET')
@@ -1412,26 +1388,36 @@ function api(type, params, method) {
             header: {
                 'context-type': "application/json"
             },
-            success: res => {
-                if (res.data.code == 0) {
-                    resolve(res.data)
-                } else {
-                    showToast(res.data.message ? res.data.message : '加载失败')
-                    reject(res.data.message)
+            success: response => {
+                console.log(response)
+                let code = response.data.code
+                if (code !== 0) {
+                    let message
+                    switch (code) {
+                        case 99:
+                            message = '未登录'
+                            store.commit("isShowLoginModal", true);
+                            wx.switchTab({ url: '/pages/personalCenter/personalCenter/main' });
+                            break;
+                        default:
+                            switch (response.data.message) {
+                                case '该活动已删除':
+                                    common.setTime(1500).then(() => {
+                                        wx.navigateBack({ delta: 1 });
+                                    })
+                                    break;
+                            }
+                            message = response.data.message ? response.data.message : '服务器错误，请稍后再试'
+                            break;
+                    }
+                    common.showToast(message)
+                    return reject('未授权，获取token失败')
                 }
+                resolve(response.data)
             },
             fail: err => { reject(err) }
         })
     })
-}
-
-function getImgInfo(item) {
-    return new Promise(resolve => {
-        wx.getImageInfo({
-            src: item,
-            success: resolve
-        });
-    });
 }
 const config = {
     service: {
@@ -1442,7 +1428,7 @@ const config = {
 };
 //实例化一个又拍云对象
 import { Upyun } from "@/lib/upyun-wxapp-sdk.js";
-import { showToast } from "@/utils/pointDialog";
+import common from "@/utils/common";
 const upyun = new Upyun({
     bucket: "bst-upload-images",
     operator: "bst100",
@@ -1450,7 +1436,7 @@ const upyun = new Upyun({
 });
 export { config, upyun };
 import { store } from "@/store/store"
-import { bdEncrypt } from "@/utils/public"
+import { bdEncrypt } from "@/utils/util"
 //调用高德地图api 
 const Map = require('../lib/AMapWX/amap-wx.js')
 const mapApi = new Map.AMapWX({ key: '1d9d158544d9d4e521042177ade48cda' });
@@ -1473,7 +1459,7 @@ const getRegeo = (fc, location = '') => {
 
         },
         fail() {
-            showToast("获取位置失败")
+            common.showToast("获取位置失败")
             store.commit("getActiveAddress", { data: { code: "340100", city_code: "340100", district: "合肥市", city: "合肥市", lat: 31.79322, lng: 117.30794, address: '合肥市' }, status: 1 })
         }
     })
@@ -1499,8 +1485,8 @@ const getLocation = (fc, address) => {
             })
         },
         fail() {
-            showToast("获取城市信息失败，请选择其他城市");
+            common.showToast("获取城市信息失败，请选择其他城市");
         }
     });
 }
-export { getRegeo, getLocation, getImgInfo }
+export { getRegeo, getLocation }

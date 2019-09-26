@@ -79,8 +79,7 @@
 </template>
 
 <script>
-import api from "@/api";
-import { showToast, showSuccess, showModal } from "@/utils/pointDialog";
+
 export default {
   data() {
     return {
@@ -99,13 +98,13 @@ export default {
   },
   methods: {
     phoneContact() {
-      showToast("小程序暂不支持通讯录功能");
+      this.$showToast("小程序暂不支持通讯录功能");
       return;
     },
     inputValue() {
       let { mobile } = this.formData;
       if (this.regexp.test(mobile)) {
-        api.trafficPackage({ mobile }).then(res => {
+        this.$api.trafficPackage({ mobile }).then(res => {
           let { month, week, day } = res.info;
           this.list1 = month;
           this.list2 = week;
@@ -121,18 +120,18 @@ export default {
     formSubmit() {
       let { mobile, id } = this.formData;
       if (!mobile) {
-        showToast("请输入手机号码");
+        this.$showToast("请输入手机号码");
         return;
       }
       if (!this.regexp.test(mobile)) {
-        showToast("请输入正确的手机号码");
+        this.$showToast("请输入正确的手机号码");
         return;
       }
       if (!id) {
-        showToast("请选择套餐");
+        this.$showToast("请选择套餐");
         return;
       }
-      api.trafficOrder(this.formData).then(res => {});
+      this.$api.trafficOrder(this.formData).then(res => {});
     }
   },
   onLoad() {

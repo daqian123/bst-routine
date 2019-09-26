@@ -1,5 +1,5 @@
 import api from "@/api"
-import { showToast } from "@/utils/pointDialog"
+import common from "@/utils/common"
 import { store } from "@/store/store"
 const moduleHitchhiking = {
     state: {
@@ -18,19 +18,19 @@ const moduleHitchhiking = {
                 let drivers = res.info.drivers;
                 if (drivers.length == 0) {
                     if (!store.state.moduleLogin.iosSystemStatus) {
-                        showToast("小程序暂时不支持ios用户认证");
+                        common.showToast("小程序暂时不支持ios用户认证");
                         return;
                     }
-                    showToast("您还未认证，请先去进行司机认证")
+                    common.showToast("您还未认证，请先去进行司机认证")
                     setTimeout(() => {
                         wx.navigateTo({ url: "../driverApprove/main" })
                     }, 1000)
                 } else if (cars.length == 0) {
                     if (!store.state.moduleLogin.iosSystemStatus) {
-                        showToast("小程序暂时不支持ios用户认证");
+                        common.showToast("小程序暂时不支持ios用户认证");
                         return;
                     }
-                    showToast("您还没有认证通过的车辆，请先去进行车辆认证")
+                    common.showToast("您还没有认证通过的车辆，请先去进行车辆认证")
                     setTimeout(() => {
                         wx.navigateTo({ url: "../carApprove/main" })
                     }, 1000)

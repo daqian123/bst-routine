@@ -1,10 +1,10 @@
 import { store } from "@/store/store";
-import api from "@/api/index";
-import { showLoading, showToast } from "@/utils/pointDialog";
+import api from "@/api";
+import common from "@/utils/common";
 export default {
     //检查用户是否授权
     viewAuthorize() {
-        showLoading("加载中")
+        common.showLoading("加载中")
         let that = this;
         wx.getSetting({
             success: function (res) {
@@ -30,7 +30,7 @@ export default {
                 }
             },
             fail: err => {
-                showToast("获取位置信息失败，请打开手机设置开启微信位置权限")
+                common.showToast("获取位置信息失败，请打开手机设置开启微信位置权限")
                 store.commit("setLocationStatus", false)
             }
         });

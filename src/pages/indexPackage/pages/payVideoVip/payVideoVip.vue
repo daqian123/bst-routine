@@ -23,8 +23,7 @@
 </template>
 
 <script>
-import api from "@/api";
-import { showToast, showSuccess, showModal } from "@/utils/pointDialog";
+
 export default {
   data() {
     return {
@@ -35,10 +34,10 @@ export default {
   methods: {
     formSubmit() {
       if (!this.formData.account) {
-        showToast("请输入账号");
+        this.$showToast("请输入账号");
         return;
       }
-      api.videoOrder(this.formData).then(res => {});
+      this.$api.videoOrder(this.formData).then(res => {});
     }
   },
   onLoad(options) {

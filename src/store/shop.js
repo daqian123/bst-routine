@@ -1,7 +1,6 @@
 import api from "@/api"
 import { store } from "./store"
-import Vue from "vue"
-import { showModal, showSuccess, showToast } from "@/utils/pointDialog";
+import common from "@/utils/common";
 const moduleShop = {
     state: {
         activeAddress: "",//收货地址
@@ -28,7 +27,7 @@ const moduleShop = {
         //确认支付页面
         confirmPayMenuCommodity(state, shop_id) {
             if (state.menuTotal < 1) {
-                showToast("请选择商品");
+                common.showToast("请选择商品");
                 return;
             }
             let list = []
@@ -59,7 +58,7 @@ const moduleShop = {
         //减少商品
         groupMenuCommodityNum(state, item) {
             if (item.num < 1) {
-                showToast("请添加商品");
+                common.showToast("请添加商品");
                 return;
             }
             item.num--;
@@ -285,7 +284,7 @@ const moduleShop = {
         deleteAddress(state, data) {
             let list = store.state.moduleMove.moveList
             api.deleteAddress({ a_id: data.data.id }).then(res => {
-                showSuccess("已删除")
+                common.showSuccess("已删除")
                 list.splice(data.index, 1)
             });
         },
